@@ -20,3 +20,9 @@ def get_page(url):
     except requests.exceptions.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return None
+    
+def parse_book_list(html):
+    """Parse book list page and extract book URLs"""
+    soup = BeautifulSoup(html, 'lxml')
+    books = soup.find_all('article', class_='product_pod')
+    return [BASE_URL + '/' + book.h3.a['href'] for book in books]
