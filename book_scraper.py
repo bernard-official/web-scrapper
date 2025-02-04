@@ -26,3 +26,16 @@ def parse_book_list(html):
     soup = BeautifulSoup(html, 'lxml')
     books = soup.find_all('article', class_='product_pod')
     return [BASE_URL + '/' + book.h3.a['href'] for book in books]
+
+def parse_book_page(html):
+    """Parse individual book page and extract details"""
+    soup = BeautifulSoup(html, 'lxml')
+    
+    book = {
+        'title': soup.find('h1').text.strip(),
+        'price': soup.find('p', class_='price_color').text.strip(),
+        'rating': soup.find('p', class_='star-rating')['class'][1],
+        'stock': soup.find('p', class_='instock').text.strip(),
+        'category': soup.find('ul', class_='breadcrumb').find_all('a')[2].text.strip(),
+        'description': soup.find('meta', attrs={'name': 'description'})['content'].strip(),
+    }
