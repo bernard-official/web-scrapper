@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-import time from sleep
+from time import sleep
 from random import randint 
 
 # Configuration
