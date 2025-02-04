@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 from time import sleep
-from random import randint 
+from random import randint
 
 # Configuration
 BASE_URL = "http://books.toscrape.com"
@@ -12,15 +12,15 @@ HEADERS = {
 }
 
 def get_page(url):
-    """Fetch the web page"""
+    """Fetch a web page"""
     try:
-        response = requests.get(url, headers=HEADERS)
+        response = requests.get(url, headers=HEADERS, timeout=10)
         response.raise_for_status()
         return response.content
     except requests.exceptions.RequestException as e:
         print(f"Error fetching {url}: {e}")
         return None
-    
+
 def parse_book_list(html):
     """Parse book list page and extract book URLs"""
     soup = BeautifulSoup(html, 'lxml')
@@ -39,7 +39,7 @@ def parse_book_page(html):
         'category': soup.find('ul', class_='breadcrumb').find_all('a')[2].text.strip(),
         'description': soup.find('meta', attrs={'name': 'description'})['content'].strip(),
     }
-
+    
     # Convert rating to numerical value
     rating_map = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
     book['rating'] = rating_map.get(book['rating'], 0)
